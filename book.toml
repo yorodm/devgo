@@ -1,0 +1,5 @@
+[book]
+authors = ["Yoandy Rodriguez Martinez"]
+multilingual = false
+src = "src"
+title = "Building DEV in Go"
