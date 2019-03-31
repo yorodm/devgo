@@ -3,6 +3,7 @@ module github.com/yorodm/devgo
 go 1.12
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.3.3
 	github.com/eknkc/basex v1.0.0 // indirect
 	github.com/go-chi/chi v4.0.2+incompatible
 	github.com/go-chi/cors v1.0.0
@@ -11,5 +12,6 @@ require (
 	github.com/joho/godotenv v1.3.0
 	github.com/lib/pq v1.0.0
 	github.com/matoous/go-nanoid v0.0.0-20181114085210-eab626deece6
+	golang.org/x/crypto v0.0.0-20190313024323-a1f597ede03a
 	golang.org/x/net v0.0.0-20190320064053-1272bf9dcd53 // indirect
 )
