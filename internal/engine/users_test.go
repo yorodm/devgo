@@ -39,7 +39,7 @@ func TestCreateUser(t *testing.T) {
 
 func TestListUser(t *testing.T) {
 	ctx := context.TODO()
-	data, err := e.Users(ctx)
+	data, err := e.ListUsers(ctx)
 	user := data[0]
 	if user.Email != "user@user.com" {
 		t.Fail()
