@@ -19,6 +19,10 @@ func TestMain(m *testing.M) {
 	var err error
 	db, err := sql.Open("postgres", "postgresql://root@localhost:26257/devgo_test?sslmode=disable")
 	err = db.Ping()
+	if err != nil {
+		fmt.Printf("%v", err)
+		os.Exit(1)
+	}
 	defer db.Close()
 	_, err = db.Exec("delete from users")
 	if err != nil {
