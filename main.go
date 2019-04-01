@@ -24,7 +24,7 @@ func run() error {
 	var (
 		port      = environ("PORT", "3000")
 		originStr = environ("SITE_URL", "http://localhost:"+port)
-		dbURL     = environ("DATABASE_URL", "postgresql://root@HAPPY:26257/devgo?sslmode=disable")
+		dbURL     = environ("DATABASE_URL", "postgresql://root@127.0.0.1:26257/devgo?sslmode=disable")
 		secret    = environ("SECRET_KEY", "1qazxsw23edcvfr45tgbgfr432we56789")
 		blog      *engine.Engine
 	)
