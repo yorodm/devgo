@@ -33,9 +33,12 @@ func NewHandler(e *engine.Engine, url *url.URL) (http.Handler, error) {
 	// Middleware
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
-	// Routes
+	//Auth
+	r.Get("/auth", web.login)
+	// User routes
 	r.Get("/user", web.listUsers)
 	r.Post("/user", web.createUser)
+
 	return r, nil
 }
 
