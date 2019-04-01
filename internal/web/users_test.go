@@ -23,18 +23,32 @@ func setupServiceAndMock(t *testing.T) (s *service, mock sqlmock.Sqlmock) {
 }
 
 func TestListUsers(t *testing.T) {
+	var m []map[string]interface{}
 	request, _ := http.NewRequest(http.MethodGet, "/users", nil)
 	request.Header.Add("Content-Type", "application/json")
 	response := httptest.NewRecorder()
 	s, mock := setupServiceAndMock(t)
-	mock.ExpectQuery("select id, email, username from users").WillReturnRows(sqlmock.NewRows([]string{"1", "user@user.com", "user"}))
+	rows := sqlmock.NewRows([]string{"id", "email", "username"}).
+		AddRow(1, "adrian@nowhere.com", "adrian").
+		AddRow(2, "hernan@nowhere.com", "hernan")
+	mock.ExpectQuery("select id, email, username from users").WillReturnRows(rows)
 	s.listUsers(response, request)
-	if r := response.Result(); r.StatusCode == 500 {
+	r := response.Result()
+	defer r.Body.Close()
+	if r.StatusCode == 500 {
 		t.Error(r)
 	}
 	if err := mock.ExpectationsWereMet(); err != nil {
 		t.Error(err)
 	}
+	dec := json.NewDecoder(r.Body)
+	if err := dec.Decode(&m); err != nil {
+		t.Error(err)
+	}
+	if m[0]["email"] != "adrian@nowhere.com" {
+		t.Errorf("Wrong response %v", m)
+	}
+
 }
 
 func TestCreateUsers(t *testing.T) {
