@@ -37,7 +37,7 @@ func StartEngine(e *engine.Engine, url *url.URL) error {
 	r.Use(middleware.Recoverer)
 	r.Use(csrf.Protect([]byte("32-byte-long-auth-key")))
 	// Routes
-	r.Get("/users", web.users)
+	r.Get("/user", web.listUsers)
 	r.Post("/user", web.createUser)
 	// Start server
 	log.Println(url)

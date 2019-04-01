@@ -18,7 +18,7 @@ func (*Engine) NewID() (string, error) {
 	return gonanoid.Nanoid()
 }
 
-// New creates a new engine.Engine
+// New instantiates a new Engine
 func New(d *sql.DB, key string) *Engine {
 	codec := branca.NewBranca(key)
 	return &Engine{

@@ -6,25 +6,26 @@ import (
 )
 
 type createUserInput struct {
-	email    string `json:"email"`
-	username string `json:"name"`
-	password string `json:"password"`
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
 
 func (s *service) createUser(w http.ResponseWriter, r *http.Request) {
 	var dto createUserInput
 	defer r.Body.Close()
 	if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		serverError(w, err)
 	}
-	err := s.CreateUser(r.Context(), dto.email, dto.username, dto.password)
+	err := s.CreateUser(r.Context(), dto.Name, dto.Email, dto.Username, dto.Password)
 	if err != nil {
 		serverError(w, err)
 	}
 }
 
-func (s *service) users(w http.ResponseWriter, r *http.Request) {
-	data, err := s.Users(r.Context())
+func (s *service) listUsers(w http.ResponseWriter, r *http.Request) {
+	data, err := s.ListUsers(r.Context())
 	if err != nil {
 		serverError(w, err)
 	}
