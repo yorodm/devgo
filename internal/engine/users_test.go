@@ -18,7 +18,9 @@ var (
 func TestMain(m *testing.M) {
 	var err error
 	db, err := sql.Open("postgres", "postgresql://root@localhost:26257/devgo_test?sslmode=disable")
+	err = db.Ping()
 	defer db.Close()
+	_, err = db.Exec("delete from users")
 	if err != nil {
 		fmt.Printf("%v", err)
 		os.Exit(1)
@@ -38,8 +40,11 @@ func TestCreateUser(t *testing.T) {
 func TestListUser(t *testing.T) {
 	ctx := context.TODO()
 	data, err := e.Users(ctx)
+	user := data[0]
+	if user.Email != "user@user.com" {
+		t.Fail()
+	}
 	if err != nil {
 		t.Error(err)
 	}
-	t.Log(data)
 }
