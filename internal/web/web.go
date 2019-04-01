@@ -11,7 +11,6 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
-	"github.com/gorilla/csrf"
 	"github.com/yorodm/devgo/internal/engine"
 )
 
@@ -35,7 +34,6 @@ func StartEngine(e *engine.Engine, url *url.URL) error {
 	// Middleware
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
-	r.Use(csrf.Protect([]byte("32-byte-long-auth-key")))
 	// Routes
 	r.Get("/user", web.listUsers)
 	r.Post("/user", web.createUser)
