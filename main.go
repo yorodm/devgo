@@ -4,8 +4,10 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"net/http"
 	"net/url"
 	"os"
+	"time"
 
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
@@ -21,6 +23,7 @@ func main() {
 }
 
 func run() error {
+	var r http.Handler
 	var (
 		port      = environ("PORT", "3000")
 		originStr = environ("SITE_URL", "http://localhost:"+port)
@@ -37,7 +40,17 @@ func run() error {
 	if err != nil {
 		return fmt.Errorf("Invalid SITE_URL")
 	}
-	if err = web.StartEngine(blog, url); err != nil {
+	if r, err = web.NewHandler(blog, url); err != nil {
+		return err
+	}
+	server := http.Server{
+		Addr:              ":" + url.Port(),
+		Handler:           r,
+		ReadHeaderTimeout: time.Second * 5,
+		ReadTimeout:       time.Second * 15,
+	}
+	err = server.ListenAndServe()
+	if err != nil {
 		return err
 	}
 	return nil

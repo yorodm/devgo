@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"time"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -18,8 +17,8 @@ type service struct {
 	*engine.Engine
 }
 
-// StartEngine starts the blog engine
-func StartEngine(e *engine.Engine, url *url.URL) error {
+// NewHandler creates a new http handler for the blog engine
+func NewHandler(e *engine.Engine, url *url.URL) (http.Handler, error) {
 	r := chi.NewRouter()
 	web := &service{e}
 	cors := cors.New(cors.Options{
@@ -37,19 +36,7 @@ func StartEngine(e *engine.Engine, url *url.URL) error {
 	// Routes
 	r.Get("/user", web.listUsers)
 	r.Post("/user", web.createUser)
-	// Start server
-	log.Println(url)
-	server := http.Server{
-		Addr:              ":" + url.Port(),
-		Handler:           r,
-		ReadHeaderTimeout: time.Second * 5,
-		ReadTimeout:       time.Second * 15,
-	}
-	err := server.ListenAndServe()
-	if err != nil {
-		return err
-	}
-	return nil
+	return r, nil
 }
 
 func serverError(w http.ResponseWriter, err error) {
