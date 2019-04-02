@@ -42,10 +42,10 @@ func (e *Engine) CreateUser(ctx context.Context, name, email, username, password
 func (e *Engine) ListUsers(ctx context.Context) (users []User, err error) {
 	var query = "select id, email, username from users"
 	rows, err := e.db.QueryContext(ctx, query)
+	defer rows.Close()
 	if err != nil {
 		return
 	}
-	defer rows.Close()
 	for rows.Next() {
 		user := User{}
 		err = rows.Scan(&user.ID, &user.Email, &user.Username)
